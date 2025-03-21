@@ -6,7 +6,7 @@ export class InvalidPageTokenException extends HttpException {
   }
 }
 
-export class YoutubeErrorException extends HttpException {
+export class YoutubeApiErrorException extends HttpException {
   constructor(message: string) {
     super(`Erro na API do Youtube: ${message}`, HttpStatus.INTERNAL_SERVER_ERROR);
   }
