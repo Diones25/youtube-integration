@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
+import { InvalidPageTokenException, YoutubeApiErrorException } from './exceptions/youtube.exceptions';
 
 @Injectable()
 export class YoutubeService {
@@ -24,7 +25,20 @@ export class YoutubeService {
       const response = await axios.get(this.apiUrl, { params });
       return response.data;
     } catch (error) {
-      throw new Error('Erro ao buscar vídeos no Youtube');
+      if (error.response && error.response.data.error) {
+        const youtubeError = error.response.data.error;
+
+        //Verifica se o erro é relacionado a um pageToken inválido
+        if (youtubeError.errors.some((err) => err.reason === 'invalidPageToken')) {
+          throw new InvalidPageTokenException();          
+        }
+
+        //Outros erros de API do Youtube
+        throw new YoutubeApiErrorException(youtubeError.message);
+      }
+
+      // Erros genéricos (ex: prblemas de rede)
+      throw new YoutubeApiErrorException('Erro ao se conectar à API do Youtube');
     }
   }
 }
