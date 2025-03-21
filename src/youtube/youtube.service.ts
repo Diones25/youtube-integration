@@ -11,12 +11,13 @@ export class YoutubeService {
     this.apiKey = this.configService.get<string>('YOUTUBE_API_KEY');
   }
 
-  async searchVideos(query: string, maxResults: number = 10): Promise<any> {
+  async searchVideos(query: string, maxResults: number = 10, pageToken?: string): Promise<any> {
     const params = {
       part: 'snippet',
       q: query,
       maxResults: maxResults,
       key: this.apiKey,
+      pageToken: pageToken || undefined,
     };
 
     try {
