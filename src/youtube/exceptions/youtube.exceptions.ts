@@ -3,7 +3,7 @@ import { HttpException, HttpStatus } from "@nestjs/common";
 // Exceção para pageToken inválido ou expirado
 export class InvalidPageTokenException extends HttpException {
   constructor() {
-    super('O pageToken fornecido é invalido ou expirado.', HttpStatus.BAD_REQUEST);
+    super('A solicitação especifica um token de página inválido.', HttpStatus.BAD_REQUEST);
   }
 }
 
@@ -24,7 +24,7 @@ export class MissingQueryParameterException extends HttpException {
 // Exceção para quando a cota de requisições à API do YouTube é excedida
 export class QuotaExceededException extends HttpException {
   constructor() {
-    super('A cota de requisições à API do YouTube foi excedida.', HttpStatus.TOO_MANY_REQUESTS);
+    super('A solicitação não pode ser concluída porque você excedeu sua cota.', HttpStatus.TOO_MANY_REQUESTS);
   }
 }
 
