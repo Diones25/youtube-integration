@@ -1,6 +1,7 @@
 import { Controller, Get, Query, UseFilters } from '@nestjs/common';
 import { YoutubeService } from './youtube.service';
 import { HttpExceptionFilter } from './libs/filters/http-exception.filter';
+import { MissingQueryParameterException } from './exceptions/youtube.exceptions';
 
 
 @Controller('youtube')
@@ -16,7 +17,7 @@ export class YoutubeController {
   ) {
     
     if (!query) {
-      return { error: 'Query parameter is required' };
+      throw new MissingQueryParameterException();
     }
 
     return this.youtubeService.searchVideos(query, maxResults, pageToken);
