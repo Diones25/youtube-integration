@@ -13,7 +13,7 @@ import {
 @Injectable()
 export class YoutubeService {
   private readonly apiKey: string | undefined;
-  private readonly apiUrl: string = 'https://www.googleapis.com/youtube/v3/search';
+  private readonly apiUrl: string = 'https://www.googleapis.com/youtube/v3';
 
   constructor(private configService: ConfigService) {
     this.apiKey = this.configService.get<string>('YOUTUBE_API_KEY');
@@ -29,7 +29,7 @@ export class YoutubeService {
     };
 
     try {
-      const response = await axios.get(this.apiUrl, { params });
+      const response = await axios.get(`${this.apiUrl}/search`, { params });
       return response.data;
     } catch (error) {
       if (error.response && error.response.data.error) {
