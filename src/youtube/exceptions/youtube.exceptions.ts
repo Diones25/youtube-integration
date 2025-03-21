@@ -37,7 +37,7 @@ export class UnauthorizedException extends HttpException {
 
 // Exceção para quando um vídeo expetifico não é encontrado
 export class VideoNotFoundException extends HttpException {
-  constructor(videoId: string) {
-    super(`Vídeo com ID ${videoId} não foi encontrado.`, HttpStatus.NOT_FOUND);
+  constructor(query: string) {
+    super(`Vídeo com a query "${query}" não foi encontrado.`, HttpStatus.NOT_FOUND);
   }
 }
