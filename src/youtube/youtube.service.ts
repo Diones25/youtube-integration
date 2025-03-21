@@ -1,7 +1,14 @@
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import axios from 'axios';
-import { InvalidPageTokenException, YoutubeApiErrorException } from './exceptions/youtube.exceptions';
+import {
+  InvalidPageTokenException,
+  MissingQueryParameterException,
+  QuotaExceededException,
+  UnauthorizedException,
+  VideoNotFoundException,
+  YoutubeApiErrorException
+} from './exceptions/youtube.exceptions';
 
 @Injectable()
 export class YoutubeService {
@@ -31,6 +38,22 @@ export class YoutubeService {
         //Verifica se o erro é relacionado a um pageToken inválido
         if (youtubeError.errors.some((err) => err.reason === 'invalidPageToken')) {
           throw new InvalidPageTokenException();          
+        }
+
+        if (youtubeError.errors.some((err) => err.reason === 'missingRequiredParameter')) {
+          throw new MissingQueryParameterException();
+        }
+
+        if (youtubeError.errors.some((err) => err.reason === 'quotaExceeded')) {
+          throw new QuotaExceededException();
+        }
+
+        if (youtubeError.errors.some((err) => err.reason === 'authorizationRequired')) {
+          throw new UnauthorizedException();
+        }
+
+        if (youtubeError.errors.some((err) => err.reason === 'videoNotFound')) {
+          throw new VideoNotFoundException(query);
         }
 
         //Outros erros de API do Youtube
